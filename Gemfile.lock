@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    sqlite3 (1.4.2)
+    system (0.1.3)
+      version (~> 1.0.0)
+    version (1.0.0)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  sqlite3
+  system
+
+BUNDLED WITH
+   2.2.3

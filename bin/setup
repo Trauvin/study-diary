@@ -1,0 +1,35 @@
+#! /usr/bin/env ruby
+
+puts '== Instalando dependências =='
+system 'gem install bundler --conservative'
+system('bundle check') || system('bundle install')
+
+require 'sqlite3'
+
+puts "\n == Preparando BD =="
+
+begin
+  db = SQLite3::Database.open "db/database.db"
+  db.execute <<~SQL
+    CREATE TABLE Studys (
+      id integer primary key,
+      title varchar(255),
+      status varchar(255),
+      category varchar(255)
+    );
+  SQL
+
+  seed_data = [[1, "Enviar documentos", "Completo", "Trabalho"],
+               [2, "Comprar papel higiênico", "Em andamento", "Casa"],
+               [3, "Limpar casa", "Em andamento", "Casa"]]
+
+
+  seed_data.each do |data|
+    db.execute "INSERT INTO Studys VALUES ( ?, ?, ?, ? )", data
+  end
+
+rescue SQLite3::Exception => e
+  puts e
+ensure
+  db.close if db
+end
