@@ -17,8 +17,9 @@ class StudyItems
     |     [3] Buscar item                 |
     |     [4] Deletar                     |
     |     [5] Atualizar status            |
-    |     [6] Ver items concluídos        | 
-    |     [7] Sair                        |
+    |     [6] Ver items concluídos        |
+    |     [7] Listar por categoria        |  
+    |     [8] Sair                        |
     |     Escolha uma opção:              |
     =======================================
     "            
@@ -44,6 +45,16 @@ class StudyItems
     studys.each do |study|
       puts " %s - %s - %s - %s " % [ study['id'], study['title'], study['status'], study['category'] ]
     end
+  end
+
+  def self.category_list(categoria)
+    db = SQLite3::Database.open "db/database.db"
+    db.results_as_hash = true
+    studys = db.execute "SELECT id, title, status, category FROM studys WHERE category = '#{categoria}'"
+    studys.each do |study|
+      puts " %s - %s - %s - %s " % [ study['id'], study['title'], study['status'], study['category'] ]
+    end
+    db.close
   end
 
   def save_to_db

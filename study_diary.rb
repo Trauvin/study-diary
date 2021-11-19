@@ -2,7 +2,6 @@ require './lib/study_items.rb'
 require 'system'
 opcao = 0
 
-
 while opcao != 7
   StudyItems.menu
 
@@ -35,12 +34,17 @@ while opcao != 7
     print 'Digite o ID do estudo terminado: '
     id = gets.to_i
 
-    StudyItems.change_status(id, 'Concluído')
+    StudyItems.change_status(id)
     
   when 6
     StudyItems.only_concluded
 
   when 7
+    print 'Digite a categoria que deseja listar: '
+    category = gets.to_s.chomp
+    StudyItems.category_list(category)
+    
+  when 8
     banner = 'figlet -c Ate mais ver'
     system(banner)
   end
