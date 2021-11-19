@@ -20,9 +20,8 @@ class StudyItems
     |     [6] Ver items concluídos        |
     |     [7] Listar por categoria        |  
     |     [8] Sair                        |
-    |     Escolha uma opção:              |
-    =======================================
-    "            
+    ======================================= "
+    print "\n Escolha uma opção: "             
   end
 
   def self.all
@@ -47,10 +46,10 @@ class StudyItems
     end
   end
 
-  def self.category_list(categoria)
+  def self.category_list(category)
     db = SQLite3::Database.open "db/database.db"
     db.results_as_hash = true
-    studys = db.execute "SELECT id, title, status, category FROM studys WHERE category = '#{categoria}'"
+    studys = db.execute "SELECT id, title, status, category FROM studys WHERE category = '#{category}'"
     studys.each do |study|
       puts " %s - %s - %s - %s " % [ study['id'], study['title'], study['status'], study['category'] ]
     end

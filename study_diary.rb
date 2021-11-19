@@ -2,7 +2,7 @@ require './lib/study_items.rb'
 require 'system'
 opcao = 0
 
-while opcao != 7
+while opcao != 8
   StudyItems.menu
 
   opcao = gets.to_i
