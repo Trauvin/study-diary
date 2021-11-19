@@ -15,8 +15,10 @@ class StudyItems
     |     [1] Cadastrar item              |
     |     [2] Ver items cadastrados       | 
     |     [3] Buscar item                 |
-    |     [4] Deletar                     | 
-    |     [7] sair                        |
+    |     [4] Deletar                     |
+    |     [5] Atualizar status            |
+    |     [6] Ver items concluídos        | 
+    |     [7] Sair                        |
     |     Escolha uma opção:              |
     =======================================
     "            
@@ -25,7 +27,18 @@ class StudyItems
   def self.all
     db = SQLite3::Database.open "db/database.db"
     db.results_as_hash = true
-    studys = db.execute "SELECT id, title, status, category FROM studys"
+    studys = db.execute "SELECT id, title, status, category FROM studys WHERE status != 'Concluído'"
+    db.close
+
+    studys.each do |study|
+      puts " %s - %s - %s - %s " % [ study['id'], study['title'], study['status'], study['category'] ]
+    end
+  end
+
+  def self.only_concluded
+    db = SQLite3::Database.open "db/database.db"
+    db.results_as_hash = true
+    studys = db.execute "SELECT id, title, status, category FROM studys WHERE status = 'Concluído'"
     db.close
 
     studys.each do |study|
@@ -56,6 +69,15 @@ class StudyItems
   def self.delete(id)
     db = SQLite3::Database.open "db/database.db"
     study = db.execute "DELETE FROM studys WHERE id = '#{id}'"
+    puts "XXX Item deletado com sucesso! XXX" 
+    db.close
+  end
+
+  def self.change_status(id, new_status = 'Concluído')
+    db = SQLite3::Database.open "db/database.db"
+    study = db.execute "UPDATE studys SET status = '#{new_status}' WHERE id = '#{id}'"
+    study = db.execute "SELECT title, category, status FROM studys WHERE id = '#{id}'"
+    study.each {|el| print el}
     db.close
   end
 end
