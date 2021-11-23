@@ -15,7 +15,9 @@ class StudyItems
       puts "#%s - %s - %s - %s " % [ item['id'], item['title'], item['status'], item['category'] ]
     end
 
-    items.empty? if 'Nenhum item encontrado'
+    if items.empty?
+      puts "Nada para mostrar..."
+    end
     wait_and_clear
   end
 
@@ -32,7 +34,7 @@ class StudyItems
   def self.only_concluded
     db = SQLite3::Database.open "db/database.db"
     db.results_as_hash = true
-    studys = db.execute "SELECT id, title, status, category FROM studys WHERE status = 'Concluído'"
+    studys = db.execute "SELECT id, title, status, category FROM studys WHERE status = 'Concluído'" 
     db.close
 
     print_item(studys)
@@ -41,8 +43,9 @@ class StudyItems
   def self.category_list(category)
     db = SQLite3::Database.open "db/database.db"
     db.results_as_hash = true
-    studys = db.execute "SELECT id, title, status, category FROM studys WHERE category = '#{category}'"
+    studys = db.execute "SQL SELECT id, title, status, category FROM studys WHERE category = '#{category}' "
     db.close
+
     print_item(studys)
   end
 
