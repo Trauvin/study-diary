@@ -50,13 +50,12 @@ while opcao != EXIT
     title = gets.to_s.chomp
 
     StudyItems.find_by_title(title)
-    
   when 4
     print 'Digite o ID do item que deseja excluir: '
     id = gets.to_i
 
     StudyItems.delete(id)
-
+    
   when 5
     print 'Digite o ID do estudo terminado: '
     id = gets.to_i

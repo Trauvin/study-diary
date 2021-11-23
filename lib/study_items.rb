@@ -1,20 +1,22 @@
 require 'sqlite3'
+require 'system'
 
 class StudyItems
   attr_accessor :title, :status, :category
 
-  def initialize(title:, status: 'Em andamento', category: Category.new)
+  def initialize(title:, category: Category.new)
     @title = title
-    @status = status
     @category = category
+    @status = 'Em andamento'
   end
 
-  def self.print_items(items)
+  def self.print_item(items)
     items.each do |item|
       puts "#%s - %s - %s - %s " % [ item['id'], item['title'], item['status'], item['category'] ]
     end
 
     items.empty? if 'Nenhum item encontrado'
+    wait_and_clear
   end
 
   def self.not_concluded
@@ -22,7 +24,7 @@ class StudyItems
     db.results_as_hash = true
     studys = db.execute "SELECT id, title, status, category FROM studys WHERE status != 'Concluído'"
 
-    print_items(studys)
+    print_item(studys)
 
     db.close
   end
@@ -33,7 +35,7 @@ class StudyItems
     studys = db.execute "SELECT id, title, status, category FROM studys WHERE status = 'Concluído'"
     db.close
 
-    print_items(studys)
+    print_item(studys)
   end
 
   def self.category_list(category)
@@ -41,7 +43,7 @@ class StudyItems
     db.results_as_hash = true
     studys = db.execute "SELECT id, title, status, category FROM studys WHERE category = '#{category}'"
     db.close
-    print_items(studys)
+    print_item(studys)
   end
 
   def insert
@@ -50,7 +52,9 @@ class StudyItems
     last_id = db.execute "SELECT id FROM studys ORDER BY id DESC LIMIT 1"
     last_id = last_id.join.to_i
     db.execute "INSERT INTO studys VALUES('#{ last_id + 1 }',  '#{ title }', '#{ status }', '#{ category }')"
+    puts "Item criado com sucesso!"
     db.close
+    wait_and_clear
     self
   end
 
@@ -60,7 +64,7 @@ class StudyItems
     studys = db.execute "SELECT title, status, category FROM studys where title = '#{title}'"
     db.close
 
-    print_items(studys)
+    print_item(studys)
   end
 
   def self.delete(id)
@@ -68,6 +72,7 @@ class StudyItems
     study = db.execute "DELETE FROM studys WHERE id = '#{id}'"
     puts "XXX Item deletado com sucesso! XXX" 
     db.close
+    wait_and_clear
   end
 
   def self.change_status(id, new_status = 'Concluído')
@@ -76,5 +81,11 @@ class StudyItems
     study = db.execute "SELECT title, category, status FROM studys WHERE id = '#{id}'"
     study.each {|el| print el}
     db.close
+  end
+
+  def self.wait_and_clear
+    puts 'Pressione qualquer tecla para continuar...'
+    STDIN.getc()
+    system('clear')
   end
 end
