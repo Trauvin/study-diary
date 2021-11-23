@@ -54,7 +54,6 @@ class StudyItems
     db.execute "INSERT INTO studys VALUES('#{ last_id + 1 }',  '#{ title }', '#{ status }', '#{ category }')"
     puts "Item criado com sucesso!"
     db.close
-    wait_and_clear
     self
   end
 

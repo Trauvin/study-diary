@@ -27,54 +27,58 @@ def menu
   gets.to_i         
 end
 
-opcao = 0
 
+def start
+  opcao = 0
 
-while opcao != EXIT
-  opcao = menu()
+  while opcao != EXIT
+    opcao = menu()
 
-  case opcao
-  when REGISTER
-    print "Digite o titulo do estudo: "
-    title = gets.to_s.chomp
-    print "Digite a categoria do estudo: "
-    category = gets.to_s.chomp
+    case opcao
+    when REGISTER
+      print "Digite o titulo do estudo: "
+      title = gets.to_s.chomp
+      print "Digite a categoria do estudo: "
+      category = gets.to_s.chomp
 
-    e = StudyItems.new(title: title, category: category).insert
+      e = StudyItems.new(title: title, category: category).insert
+     
 
-  when SEE_NOT_CONCLUDED
-    StudyItems.not_concluded
+    when SEE_NOT_CONCLUDED
+      StudyItems.not_concluded
 
-  when 3
-    print "Digite o title que deseja buscar: "
-    title = gets.to_s.chomp
+    when FIND
+      print "Digite o title que deseja buscar: "
+      title = gets.to_s.chomp
 
-    StudyItems.find_by_title(title)
-  when 4
-    print 'Digite o ID do item que deseja excluir: '
-    id = gets.to_i
+      StudyItems.find_by_title(title)
+    when DELETE
+      print 'Digite o ID do item que deseja excluir: '
+      id = gets.to_i
 
-    StudyItems.delete(id)
-    
-  when 5
-    print 'Digite o ID do estudo terminado: '
-    id = gets.to_i
+      StudyItems.delete(id)
+      
+    when UPDATE_STATUS
+      print 'Digite o ID do estudo terminado: '
+      id = gets.to_i
 
-    StudyItems.change_status(id)
-    
-  when 6
-    StudyItems.only_concluded
+      StudyItems.change_status(id)
+      
+    when SEE_NOT_CONCLUDED
+      StudyItems.only_concluded
 
-  when 7
-    print 'Digite a categoria que deseja listar: '
-    category = gets.to_s.chomp
-    StudyItems.category_list(category)
-    
-  when 8
-    
-    banner = 'figlet -c Ate mais ver'
-    system(banner)
+    when LIST_BY_CATEGORY
+      print 'Digite a categoria que deseja listar: '
+      category = gets.to_s.chomp
+      StudyItems.category_list(category)
+      
+    when EXIT
+      banner = 'figlet -c Ate mais ver'
+      system(banner)
+    end
   end
 end
+
+start
 
 

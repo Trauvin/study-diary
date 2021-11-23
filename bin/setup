@@ -19,9 +19,9 @@ begin
     );
   SQL
 
-  seed_data = [[1, "Enviar documentos", "Completo", "Trabalho"],
-               [2, "Comprar papel higiênico", "Em andamento", "Casa"],
-               [3, "Limpar casa", "Em andamento", "Casa"]]
+  seed_data = [[1, "Estoicismo", "Em andamento", "Filosofia"],
+               [2, "Ruby", "Em andamento", "Programação"],
+               [3, "Biscoito", "Em andamento", "Culinária"]]
 
 
   seed_data.each do |data|
