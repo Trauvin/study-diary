@@ -9,30 +9,22 @@ class StudyItems
     @category = category
   end
 
-  def self.menu
-    puts "
-    =======================================
-    |     [1] Cadastrar item              |
-    |     [2] Ver items cadastrados       | 
-    |     [3] Buscar item                 |
-    |     [4] Deletar                     |
-    |     [5] Atualizar status            |
-    |     [6] Ver items concluídos        |
-    |     [7] Listar por categoria        |  
-    |     [8] Sair                        |
-    ======================================= "
-    print "\n Escolha uma opção: "             
+  def self.print_items(items)
+    items.each do |item|
+      puts "#%s - %s - %s - %s " % [ item['id'], item['title'], item['status'], item['category'] ]
+    end
+
+    items.empty? if 'Nenhum item encontrado'
   end
 
-  def self.all
+  def self.not_concluded
     db = SQLite3::Database.open "db/database.db"
     db.results_as_hash = true
     studys = db.execute "SELECT id, title, status, category FROM studys WHERE status != 'Concluído'"
-    db.close
 
-    studys.each do |study|
-      puts " %s - %s - %s - %s " % [ study['id'], study['title'], study['status'], study['category'] ]
-    end
+    print_items(studys)
+
+    db.close
   end
 
   def self.only_concluded
@@ -41,22 +33,18 @@ class StudyItems
     studys = db.execute "SELECT id, title, status, category FROM studys WHERE status = 'Concluído'"
     db.close
 
-    studys.each do |study|
-      puts " %s - %s - %s - %s " % [ study['id'], study['title'], study['status'], study['category'] ]
-    end
+    print_items(studys)
   end
 
   def self.category_list(category)
     db = SQLite3::Database.open "db/database.db"
     db.results_as_hash = true
     studys = db.execute "SELECT id, title, status, category FROM studys WHERE category = '#{category}'"
-    studys.each do |study|
-      puts " %s - %s - %s - %s " % [ study['id'], study['title'], study['status'], study['category'] ]
-    end
     db.close
+    print_items(studys)
   end
 
-  def save_to_db
+  def insert
     db = SQLite3::Database.open "db/database.db"
 
     last_id = db.execute "SELECT id FROM studys ORDER BY id DESC LIMIT 1"
@@ -69,11 +57,10 @@ class StudyItems
   def self.find_by_title(title)
     db = SQLite3::Database.open "db/database.db"
     db.results_as_hash = true
-    studys = db.execute "SELECT title, status, category FROM studys where title='#{title}'"
+    studys = db.execute "SELECT title, status, category FROM studys where title = '#{title}'"
     db.close
-    studys.each do |study|
-      puts "%s - %s - %s " % [ study['title'], study['status'], study['category'] ]
-    end
+
+    print_items(studys)
   end
 
   def self.delete(id)
