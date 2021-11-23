@@ -15,9 +15,7 @@ class StudyItems
       puts "#%s - %s - %s - %s " % [ item['id'], item['title'], item['status'], item['category'] ]
     end
 
-    if items.empty?
-      puts "Nada para mostrar..."
-    end
+    puts "Nada para monstrar..." if items.empty?
     wait_and_clear
   end
 
@@ -25,10 +23,9 @@ class StudyItems
     db = SQLite3::Database.open "db/database.db"
     db.results_as_hash = true
     studys = db.execute "SELECT id, title, status, category FROM studys WHERE status != 'Concluído'"
+    db.close
 
     print_item(studys)
-
-    db.close
   end
 
   def self.only_concluded
