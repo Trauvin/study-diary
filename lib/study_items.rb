@@ -40,7 +40,7 @@ class StudyItems
   def self.category_list(category)
     db = SQLite3::Database.open "db/database.db"
     db.results_as_hash = true
-    studys = db.execute "SQL SELECT id, title, status, category FROM studys WHERE category = '#{category}' "
+    studys = db.execute "SELECT id, title, status, category FROM studys WHERE category  LIKE '%#{category}%' COLLATE SQL_Latin1_General_CP1_CS_AS"
     db.close
 
     print_item(studys)
@@ -60,7 +60,7 @@ class StudyItems
   def self.find_by_title(title)
     db = SQLite3::Database.open "db/database.db"
     db.results_as_hash = true
-    studys = db.execute "SELECT title, status, category FROM studys where title = '#{title}'"
+    studys = db.execute "SELECT id, title, status, category FROM studys WHERE title LIKE '%#{title}%' COLLATE SQL_Latin1_General_CP1_CS_AS"
     db.close
 
     print_item(studys)
