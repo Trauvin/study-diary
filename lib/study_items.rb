@@ -2,12 +2,15 @@ require 'sqlite3'
 require 'system'
 
 class StudyItems
-  attr_accessor :title, :status, :category
+  attr_accessor :id, :title, :status, :category
 
+  @@next_id = 1
   def initialize(title:, category: Category.new)
+    @id = @@next_id
     @title = title
     @category = category
     @status = 'Em andamento'
+    @@next_id += 1
   end
 
   def self.print_item(items)
@@ -46,13 +49,19 @@ class StudyItems
     print_item(studys)
   end
 
-  def insert
+  def self.insert
     db = SQLite3::Database.open "db/database.db"
 
-    last_id = db.execute "SELECT id FROM studys ORDER BY id DESC LIMIT 1"
-    last_id = last_id.join.to_i
-    db.execute "INSERT INTO studys VALUES('#{ last_id + 1 }',  '#{ title }', '#{ status }', '#{ category }')"
-    puts "Item criado com sucesso!"
+    print "Digite o titulo do estudo: "
+    title = gets.to_s.chomp
+    print "Digite a categoria do estudo: "
+    category = gets.to_s.chomp
+
+    e = new(title: title, category: category)
+
+    db.execute "INSERT INTO studys VALUES('#{ e.id  }',  '#{ e.title }', '#{ e.status }', '#{ e.category }')"
+
+    puts "Item #{title} criado com sucesso!"
     db.close
     self
   end
@@ -65,20 +74,33 @@ class StudyItems
 
     print_item(studys)
   end
+  
+  def self.find_by_id(id)
+    db = SQLite3::Database.open "db/database.db"
+    db.results_as_hash = true
+    item = db.execute "SELECT * from studys WHERE id = '#{id}'"
+    db.close
+    print_item(item)
+  end
 
   def self.delete(id)
     db = SQLite3::Database.open "db/database.db"
+    db.results_as_hash = true
+
     study = db.execute "DELETE FROM studys WHERE id = '#{id}'"
     puts "XXX Item deletado com sucesso! XXX" 
     db.close
     wait_and_clear
   end
 
-  def self.change_status(id, new_status = 'Concluído')
+  def self.change_status
     db = SQLite3::Database.open "db/database.db"
-    study = db.execute "UPDATE studys SET status = '#{new_status}' WHERE id = '#{id}'"
-    study = db.execute "SELECT title, category, status FROM studys WHERE id = '#{id}'"
-    study.each {|el| print el}
+    db.results_as_hash = true
+
+    print 'Digite o ID do estudo terminado: '
+    id = gets.to_i
+
+    study = db.execute "UPDATE studys SET status = 'Concluído' WHERE id = '#{id}'"
     db.close
   end
 

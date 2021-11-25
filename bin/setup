@@ -19,15 +19,6 @@ begin
     );
   SQL
 
-  seed_data = [[1, "Estoicismo", "Em andamento", "Filosofia"],
-               [2, "Ruby", "Em andamento", "Programação"],
-               [3, "Biscoito", "Em andamento", "Culinária"]]
-
-
-  seed_data.each do |data|
-    db.execute "INSERT INTO Studys VALUES ( ?, ?, ?, ? )", data
-  end
-
 rescue SQLite3::Exception => e
   puts e
 ensure

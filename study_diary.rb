@@ -36,13 +36,7 @@ def start
 
     case opcao
     when REGISTER
-      print "Digite o titulo do estudo: "
-      title = gets.to_s.chomp
-      print "Digite a categoria do estudo: "
-      category = gets.to_s.chomp
-
-      e = StudyItems.new(title: title, category: category).insert
-     
+      StudyItems.insert
 
     when SEE_NOT_CONCLUDED
       StudyItems.not_concluded
@@ -59,12 +53,10 @@ def start
       StudyItems.delete(id)
       
     when UPDATE_STATUS
-      print 'Digite o ID do estudo terminado: '
-      id = gets.to_i
-
-      StudyItems.change_status(id)
+     
+      StudyItems.change_status
       
-    when SEE_NOT_CONCLUDED
+    when SEE_CONCLUDED
       StudyItems.only_concluded
 
     when LIST_BY_CATEGORY
