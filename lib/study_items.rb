@@ -4,13 +4,11 @@ require 'system'
 class StudyItems
   attr_accessor :id, :title, :status, :category
 
-  @@next_id = 1
-  def initialize(title:, category: Category.new)
-    @id = @@next_id
+  def initialize(id:nil, title:, category: Category.new)
+    @id = id
     @title = title
     @category = category
     @status = 'Em andamento'
-    @@next_id += 1
   end
 
   def self.print_item(items)
@@ -57,13 +55,16 @@ class StudyItems
     print "Digite a categoria do estudo: "
     category = gets.to_s.chomp
 
-    e = new(title: title, category: category)
+    e = StudyItems.new(title: title, category: category)
 
-    db.execute "INSERT INTO studys VALUES('#{ e.id  }',  '#{ e.title }', '#{ e.status }', '#{ e.category }')"
+    db.execute <<~SQL, title, category, 'Em andamento' 
+      INSERT INTO studys (title, category, status)
+      VALUES (?, ?, ?)
+    SQL
 
     puts "Item #{title} criado com sucesso!"
-    db.close
-    self
+  ensure
+    db.close if db
   end
 
   def self.find_by_title(title)

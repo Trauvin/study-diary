@@ -11,8 +11,8 @@ puts "\n == Preparando BD =="
 begin
   db = SQLite3::Database.open "db/database.db"
   db.execute <<~SQL
-    CREATE TABLE Studys (
-      id integer primary key,
+    CREATE TABLE studys if not exists studys (
+      id integer primary key autoincrement,
       title varchar(255),
       status varchar(255),
       category varchar(255)
