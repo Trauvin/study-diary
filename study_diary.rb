@@ -1,7 +1,7 @@
 require './lib/study_items.rb'
 require 'system'
 
-REGISTER = 1
+CREATE = 1
 SEE_NOT_CONCLUDED = 2
 FIND = 3
 DELETE = 4
@@ -13,7 +13,7 @@ EXIT = 8
 def menu
   puts <<~MENU
   =======================================
-  [#{REGISTER}] Cadastrar item                      
+  [#{CREATE}] Cadastrar item                      
   [#{SEE_NOT_CONCLUDED}] Ver items cadastrados               
   [#{FIND}] Buscar item                         
   [#{DELETE}] Deletar                            
@@ -27,49 +27,64 @@ def menu
   gets.to_i         
 end
 
-
-def start
-  opcao = 0
-
-  while opcao != EXIT
-    opcao = menu()
-
-    case opcao
-    when REGISTER
-      StudyItems.insert
-
-    when SEE_NOT_CONCLUDED
-      StudyItems.not_concluded
-
-    when FIND
-      print "Digite o title que deseja buscar: "
-      title = gets.to_s.chomp
-
-      StudyItems.find_by_title(title)
-    when DELETE
-      print 'Digite o ID do item que deseja excluir: '
-      id = gets.to_i
-
-      StudyItems.delete(id)
-      
-    when UPDATE_STATUS
-     
-      StudyItems.change_status
-      
-    when SEE_CONCLUDED
-      StudyItems.only_concluded
-
-    when LIST_BY_CATEGORY
-      print 'Digite a categoria que deseja listar: '
-      category = gets.to_s.chomp
-      StudyItems.category_list(category)
-      
-    when EXIT
-      banner = 'figlet -c Ate mais ver'
-      system(banner)
-    end
-  end
+def print_items(collection) 
+  puts collection
+  puts "Nenhum item encontrado!" if collection.empty?
 end
-start
+
+def search_study_items
+  print 'Digite a palavra para busca: '
+  term = gets.chomp
+  StudyItems.search(term)
+end
+
+def wait_and_clear
+  puts 'Pressione qualquer tecla para continuar...'
+  STDIN.getc()
+  system('clear')
+end
+
+def update_status
+  not_finalized = StudyItems.undone
+  print_items(not_finalized)
+  return if not_finalized.empty?
+
+  print 'Digite o número que deseja finalizar: '
+  index = gets.to_i
+  not_finalized[index - 1].done!
+end
+
+def concluded
+  concluded = StudyItems.done
+  print_items(concluded)
+end
+
+opcao = menu
+loop do 
+  case opcao
+  when CREATE
+    StudyItems.create
+  when SEE_NOT_CONCLUDED
+    print_items(StudyItems.all)
+  when FIND
+    print_items(search_study_items)
+  when DELETE
+    
+  when UPDATE_STATUS
+    update_status
+  when SEE_CONCLUDED
+    concluded
+  when LIST_BY_CATEGORY
+      
+  when EXIT
+    break
+    banner = 'figlet -c Ate mais ver'
+    system(banner)
+  else
+    puts 'Opção inválida'
+  end
+  wait_and_clear
+  opcao = menu
+end
 
 
