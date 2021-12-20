@@ -81,9 +81,9 @@ loop do
   when SEARCH_BY_ID
     StudyItems.search_by_id
   when EXIT
-    break
     banner = 'figlet -c Ate mais ver'
     system(banner)
+    break
   else
     puts 'Opção inválida'
   end
