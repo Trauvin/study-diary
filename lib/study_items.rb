@@ -60,11 +60,10 @@ class StudyItems
 
     collection.each do |element|
       if element.id == id 
-        puts element
         return element
       end
     end
-    return 'Item não encontrado!'
+    return nil
   end
 
   def self.search_by_id
@@ -72,16 +71,13 @@ class StudyItems
   end
 
   def self.delete
-    print 'Informe o ID do item a ser deletado: '
-    id = gets.to_i
-    
-    all.each do |element|
-      if element.id == id
-        all.delete(element)
-      end
+    element = search_by_id()
+    if element
+      all.delete(element)
+      puts "#{element.id} - #{element.title} deletado!"
+    else
+      puts 'Item não encontrado!'
     end
-
-    puts "Item #{id} deletado com sucesso!"
   end
 
   def self.undone
@@ -91,5 +87,4 @@ class StudyItems
   def self.done
     all.filter(&:done?)
   end
-
 end
