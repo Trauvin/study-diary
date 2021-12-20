@@ -8,7 +8,8 @@ DELETE = 4
 UPDATE_STATUS = 5
 SEE_CONCLUDED = 6
 LIST_BY_CATEGORY = 7
-EXIT = 8
+SEARCH_BY_ID = 8
+EXIT = 9
 
 def menu
   puts <<~MENU
@@ -19,7 +20,8 @@ def menu
   [#{DELETE}] Deletar                            
   [#{UPDATE_STATUS}] Atualizar status                    
   [#{SEE_CONCLUDED}] Ver items concluídos               
-  [#{LIST_BY_CATEGORY}] Listar por categoria   
+  [#{LIST_BY_CATEGORY}] Listar por categoria
+  [#{SEARCH_BY_ID}] Busca por ID   
   [#{EXIT}] Sair                          
   ========================================
   MENU
@@ -75,7 +77,9 @@ loop do
   when SEE_CONCLUDED
     concluded
   when LIST_BY_CATEGORY
-      
+    
+  when SEARCH_BY_ID
+    StudyItems.search_by_id
   when EXIT
     break
     banner = 'figlet -c Ate mais ver'

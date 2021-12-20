@@ -54,13 +54,21 @@ class StudyItems
     all.filter {|element| element.include?(term)}
   end
 
-  def id_exists?(collection, id)
+  def self.id_exists?(collection)
+    print 'Digite o ID: '
+    id = gets.to_i
+
     collection.each do |element|
       if element.id == id 
+        puts element
         return element
       end
     end
     return 'Item não encontrado!'
+  end
+
+  def self.search_by_id
+    id_exists?(all)
   end
 
   def self.delete
