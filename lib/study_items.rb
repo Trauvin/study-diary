@@ -7,7 +7,7 @@ class StudyItems
 
   @@next_id = 1
   @@study_list = []
-  def initialize(title:, category: Category.new)
+  def initialize(title:, category:)
     @id = @@next_id
     @title = title
     @category = category
@@ -52,6 +52,28 @@ class StudyItems
 
   def self.search(term)
     all.filter {|element| element.include?(term)}
+  end
+
+  def id_exists?(collection, id)
+    collection.each do |element|
+      if element.id == id 
+        return element
+      end
+    end
+    return 'Item não encontrado!'
+  end
+
+  def self.delete
+    print 'Informe o ID do item a ser deletado: '
+    id = gets.to_i
+    
+    all.each do |element|
+      if element.id == id
+        all.delete(element)
+      end
+    end
+
+    puts "Item #{id} deletado com sucesso!"
   end
 
   def self.undone

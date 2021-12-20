@@ -69,7 +69,7 @@ loop do
   when FIND
     print_items(search_study_items)
   when DELETE
-    
+    StudyItems.delete
   when UPDATE_STATUS
     update_status
   when SEE_CONCLUDED
