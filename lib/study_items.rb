@@ -46,6 +46,16 @@ class StudyItems
     @@study_list << StudyItems.new(title: title, category: category)
   end
 
+  def self.update_status
+    not_finalized = StudyItems.undone
+    print_items(not_finalized)
+    return if not_finalized.empty?
+  
+    print 'Digite o id do item que deseja finalizar: '
+    index = gets.to_i
+    not_finalized[index - 1].done!
+  end
+
   def self.all
     @@study_list
   end

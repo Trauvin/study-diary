@@ -1,5 +1,5 @@
 class Category
-  attr_reader :title
+  attr_reader :title, :id
 
   @@next_id = 1
   def initialize(title:)

@@ -40,25 +40,23 @@ def search_study_items
   StudyItems.search(term)
 end
 
+def list_by_category
+  category = Category.all
+  print_items(category)
+  print 'Selecione o id categoria que deseja listar: '
+  id_category = gets.to_i
+  items = StudyItems.all
+  items.each do |item|
+    if item.category.id == id_category
+      puts item
+    end
+  end
+end
+
 def wait_and_clear
   puts 'Pressione qualquer tecla para continuar...'
   STDIN.getc()
   system('clear')
-end
-
-def update_status
-  not_finalized = StudyItems.undone
-  print_items(not_finalized)
-  return if not_finalized.empty?
-
-  print 'Digite o número que deseja finalizar: '
-  index = gets.to_i
-  not_finalized[index - 1].done!
-end
-
-def concluded
-  concluded = StudyItems.done
-  print_items(concluded)
 end
 
 opcao = menu
@@ -67,17 +65,17 @@ loop do
   when CREATE
     StudyItems.create
   when SEE_NOT_CONCLUDED
-    print_items(StudyItems.all)
+    print_items(StudyItems.undone)
   when FIND
     print_items(search_study_items)
   when DELETE
     StudyItems.delete
   when UPDATE_STATUS
-    update_status
+    StudyItems.update_status
   when SEE_CONCLUDED
-    concluded
+    print_items(StudyItems.done)
   when LIST_BY_CATEGORY
-    
+    list_by_category
   when SEARCH_BY_ID
     StudyItems.search_by_id
   when EXIT
