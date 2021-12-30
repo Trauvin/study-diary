@@ -9,7 +9,8 @@ UPDATE_STATUS = 5
 SEE_CONCLUDED = 6
 LIST_BY_CATEGORY = 7
 SEARCH_BY_ID = 8
-EXIT = 9
+ADD_CATEGORY = 9
+EXIT = 10
 
 def menu
   puts <<~MENU
@@ -21,7 +22,8 @@ def menu
   [#{UPDATE_STATUS}] Atualizar status                    
   [#{SEE_CONCLUDED}] Ver items concluídos               
   [#{LIST_BY_CATEGORY}] Listar por categoria
-  [#{SEARCH_BY_ID}] Busca por ID   
+  [#{SEARCH_BY_ID}] Busca por ID
+  [#{ADD_CATEGORY}] Criar nova categoria  
   [#{EXIT}] Sair                          
   ========================================
   MENU
@@ -46,6 +48,7 @@ def list_by_category
   print 'Selecione o id categoria que deseja listar: '
   id_category = gets.to_i
   items = StudyItems.all
+  
   items.each do |item|
     if item.category.id == id_category
       puts item
@@ -78,6 +81,8 @@ loop do
     list_by_category
   when SEARCH_BY_ID
     StudyItems.search_by_id
+  when ADD_CATEGORY
+    Category.new
   when EXIT
     banner = 'figlet -c Ate mais ver'
     system(banner)

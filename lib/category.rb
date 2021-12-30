@@ -25,4 +25,10 @@ class Category
   def self.index(number)
     CATEGORIES[number]
   end
+
+  def self.new
+    print 'Digite o nome da categoria que deseja adicionar: '
+    new_category = gets.chomp
+    CATEGORIES << new_category
+  end
 end

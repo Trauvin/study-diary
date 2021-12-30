@@ -15,7 +15,6 @@ class StudyItems
     @@next_id += 1
   end
 
-
   def done?
     @done
   end
@@ -56,14 +55,24 @@ class StudyItems
     not_finalized[index - 1].done!
   end
 
-  def self.all
-    @@study_list
-  end
-
   def self.search(term)
     all.filter {|element| element.include?(term)}
   end
 
+  def self.delete
+    element = search_by_id()
+    if element
+      all.delete(element)
+      puts "#{element.id} - #{element.title} deletado!"
+    else
+      puts 'Item não encontrado!'
+    end
+  end
+
+  def self.all
+    @@study_list
+  end
+ 
   def self.id_exists?(collection)
     print 'Digite o ID: '
     id = gets.to_i
@@ -78,16 +87,6 @@ class StudyItems
 
   def self.search_by_id
     id_exists?(all)
-  end
-
-  def self.delete
-    element = search_by_id()
-    if element
-      all.delete(element)
-      puts "#{element.id} - #{element.title} deletado!"
-    else
-      puts 'Item não encontrado!'
-    end
   end
 
   def self.undone
